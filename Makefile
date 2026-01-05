@@ -3,7 +3,7 @@ include Makefile.precommit
 include Makefile.docker
 include example.env
 
-SERVICE = bborbe/skeleton
+SERVICE = bborbe/python-skeleton
 
 .PHONY: all run install clean-local
 

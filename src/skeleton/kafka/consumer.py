@@ -3,7 +3,7 @@
 import logging
 from typing import Protocol
 
-from confluent_kafka import Consumer, KafkaException, Message
+from confluent_kafka import Consumer, KafkaError, KafkaException, Message
 
 logger = logging.getLogger(__name__)
 
@@ -31,6 +31,8 @@ class KafkaMessageConsumer:
         group_id: str,
         topics: list[str],
         handler: MessageHandler,
+        *,
+        raise_on_error: bool = False,
     ) -> None:
         """Initialize the Kafka consumer.
 
@@ -39,6 +41,8 @@ class KafkaMessageConsumer:
             group_id: Consumer group ID
             topics: List of topics to subscribe to
             handler: Message handler for processing messages
+            raise_on_error: If True, re-raise exceptions from handler (stops consumer).
+                           If False (default), log and continue processing.
         """
         self._consumer = Consumer(
             {
@@ -50,6 +54,7 @@ class KafkaMessageConsumer:
         )
         self._topics = topics
         self._handler = handler
+        self._raise_on_error = raise_on_error
         self._running = False
 
         logger.info(f"Kafka consumer initialized: brokers={brokers}, group_id={group_id}")
@@ -89,8 +94,7 @@ class KafkaMessageConsumer:
         error = msg.error()
         if error is None:
             return
-        # KafkaError._PARTITION_EOF is -191
-        if error.code() == -191:  # PARTITION_EOF
+        if error.code() == KafkaError._PARTITION_EOF:  # type: ignore[attr-defined]
             logger.debug(f"Reached end of partition: {msg.topic()}[{msg.partition()}]")
         else:
             raise KafkaException(error)
@@ -112,3 +116,5 @@ class KafkaMessageConsumer:
             self._handler.handle(topic, key, value)
         except Exception:
             logger.exception(f"Error handling message: topic={topic}, key={key}")
+            if self._raise_on_error:
+                raise

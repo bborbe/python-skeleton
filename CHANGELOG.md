@@ -8,6 +8,14 @@ Please choose versions by [Semantic Versioning](http://semver.org/).
 * MINOR version when you add functionality in a backwards-compatible manner, and
 * PATCH version when you make backwards-compatible bug fixes.
 
+## v0.1.0
+
+- Add Kubernetes manifests (deployment, statefulset, service, ingress)
+- Add k8s deployment tooling with Makefile.k8s
+- Fix Docker image name from bborbe/skeleton to bborbe/python-skeleton
+- Improve consumer error handling with logging
+- Update environment config with export statements
+
 ## v0.0.1
 
 - Initial release

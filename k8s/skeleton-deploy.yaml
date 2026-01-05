@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: skeleton
+  namespace: '{{ "NAMESPACE" | env }}'
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/match-tag: "true"
+    keel.sh/pollSchedule: "@every 1m"
+    random: '{{ "RANDOM" | env }}'
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: skeleton
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /metrics
+        prometheus.io/port: "8080"
+        prometheus.io/scheme: http
+        prometheus.io/scrape: "true"
+        random: '{{ "RANDOM" | env }}'
+      labels:
+        app: skeleton
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node_type
+                    operator: In
+                    values:
+                      - 'agent'
+      containers:
+        - name: service
+          args:
+            - serve
+            - --log-level={{"LOG_LEVEL" | env}}
+          env:
+            - name: PORT
+              value: '8080'
+            - name: SENTRY_DSN
+              valueFrom:
+                secretKeyRef:
+                  key: sentry-dsn
+                  name: skeleton
+            - name: KAFKA_BROKERS
+              value: '{{ "KAFKA_BROKERS" | env }}'
+          image: '{{"DOCKER_REGISTRY" | env}}/python-skeleton:{{"BRANCH" | env}}'
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          ports:
+            - containerPort: 8080
+              name: http
+          readinessProbe:
+            httpGet:
+              path: /readiness
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            timeoutSeconds: 5
+          resources:
+            limits:
+              cpu: 200m
+              memory: 50Mi
+            requests:
+              cpu: 20m
+              memory: 20Mi
+      imagePullSecrets:
+        - name: docker-quant

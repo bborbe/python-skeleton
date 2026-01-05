@@ -1,5 +1,9 @@
 # Python Skeleton
 
+[![CI](https://github.com/bborbe/python-skeleton/actions/workflows/ci.yml/badge.svg)](https://github.com/bborbe/python-skeleton/actions/workflows/ci.yml)
+[![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
+[![License: BSD-2-Clause](https://img.shields.io/badge/License-BSD--2--Clause-blue.svg)](LICENSE)
+
 Production-ready Python project skeleton with FastAPI, Kafka, and modern tooling.
 
 ## Features

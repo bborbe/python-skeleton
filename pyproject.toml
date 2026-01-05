@@ -1,6 +1,6 @@
 [project]
 name = "skeleton"
-version = "1.0.0"
+version = "0.0.1"
 description = "Python project skeleton with FastAPI, Kafka, and production patterns"
 readme = "README.md"
 license = { text = "BSD-2-Clause" }
