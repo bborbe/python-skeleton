@@ -5,18 +5,24 @@ include example.env
 
 SERVICE = bborbe/python-skeleton
 
-.PHONY: all run install clean-local
-
+.PHONY: all
 all: precommit
 
-# Install dependencies
-install:
-	uv sync --all-extras
+.PHONY: install
+# Install dependencies (alias for sync)
+install: sync
 
+.PHONY: sync
+# Sync dependencies
+sync:
+	@uv sync --all-extras
+
+.PHONY: run
 # Run the application
 run:
 	uv run skeleton serve
 
+.PHONY: clean-local
 # Clean build artifacts (local)
 clean-local:
 	rm -rf .venv dist *.egg-info .pytest_cache .mypy_cache .ruff_cache

@@ -8,6 +8,13 @@ Please choose versions by [Semantic Versioning](http://semver.org/).
 * MINOR version when you add functionality in a backwards-compatible manner, and
 * PATCH version when you make backwards-compatible bug fixes.
 
+## v0.1.3
+
+- Add sync target to Makefile for dependency management
+- Add sync to precommit workflow for automatic dependency updates
+- Improve Makefile structure with .PHONY declarations next to each target
+- Make install an alias for sync target
+
 ## v0.1.2
 
 - Fix CI to install dev dependencies with uv sync --all-extras
