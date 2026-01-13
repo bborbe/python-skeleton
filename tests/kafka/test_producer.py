@@ -1,4 +1,4 @@
-"""Tests for Kafka producer and consumer."""
+"""Tests for Kafka producer."""
 
 from unittest.mock import Mock
 

@@ -93,6 +93,19 @@ src/skeleton/
 └── kafka/              # Kafka modules
     ├── producer.py     # Message producer
     └── consumer.py     # Message consumer
+
+tests/
+├── conftest.py         # Shared pytest fixtures
+├── test_config.py      # Configuration tests
+├── test_factory.py     # Factory function tests
+├── handlers/           # Handler tests
+│   ├── conftest.py     # Handler fixtures
+│   ├── test_health.py  # Health check tests
+│   └── test_metrics.py # Metrics endpoint tests
+└── kafka/              # Kafka tests
+    ├── conftest.py     # Kafka fixtures
+    ├── test_producer.py # Producer protocol tests
+    └── test_consumer.py # Consumer protocol tests
 ```
 
 ## License

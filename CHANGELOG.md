@@ -8,6 +8,15 @@ Please choose versions by [Semantic Versioning](http://semver.org/).
 * MINOR version when you add functionality in a backwards-compatible manner, and
 * PATCH version when you make backwards-compatible bug fixes.
 
+## v0.2.0
+
+- Restructure tests to mirror source hierarchy (handlers/, kafka/ subdirs)
+- Add py.typed marker for PEP 561 compliance
+- Add comprehensive test coverage for all 9 modules (30 tests total)
+- Add tests for CLI entry point, logging setup, and server wrapper
+- Add scoped conftest.py files with domain-specific fixtures
+- Update README with complete test structure documentation
+
 ## v0.1.3
 
 - Add sync target to Makefile for dependency management
