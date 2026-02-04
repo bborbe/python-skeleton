@@ -8,6 +8,13 @@ Please choose versions by [Semantic Versioning](http://semver.org/).
 * MINOR version when you add functionality in a backwards-compatible manner, and
 * PATCH version when you make backwards-compatible bug fixes.
 
+## v0.3.0
+
+- Upgrade Python from 3.12 to 3.14
+- Update Docker base images to python:3.14-slim
+- Update ruff and mypy target versions to py314
+- Fix type hint for Generator in test fixture
+
 ## v0.2.0
 
 - Restructure tests to mirror source hierarchy (handlers/, kafka/ subdirs)

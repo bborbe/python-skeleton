@@ -4,7 +4,7 @@ version = "0.0.1"
 description = "Python project skeleton with FastAPI, Kafka, and production patterns"
 readme = "README.md"
 license = { text = "BSD-2-Clause" }
-requires-python = ">=3.12"
+requires-python = ">=3.14"
 authors = [{ name = "Benjamin Borbe", email = "bborbe@rocketnews.de" }]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -43,7 +43,7 @@ where = ["src"]
 
 [tool.ruff]
 line-length = 100
-target-version = "py312"
+target-version = "py314"
 src = ["src", "tests"]
 
 [tool.ruff.lint]
@@ -60,7 +60,7 @@ select = [
 ]
 
 [tool.mypy]
-python_version = "3.12"
+python_version = "3.14"
 strict = true
 warn_return_any = true
 warn_unused_ignores = true

@@ -10,7 +10,7 @@ from skeleton.factory import create_app
 
 
 @pytest.fixture
-def app(config: Config) -> Generator[TestClient, None, None]:
+def app(config: Config) -> Generator[TestClient]:
     """Create a test client for the FastAPI application."""
     fastapi_app = create_app(config)
     with TestClient(fastapi_app) as client:
