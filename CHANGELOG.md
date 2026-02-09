@@ -8,6 +8,15 @@ Please choose versions by [Semantic Versioning](http://semver.org/).
 * MINOR version when you add functionality in a backwards-compatible manner, and
 * PATCH version when you make backwards-compatible bug fixes.
 
+## v0.4.0
+
+- Harmonize build system with go-skeleton
+- Add branch name sanitization in Makefile.variables (tr '/' '-')
+- Remove --no-cache from docker build for better layer caching
+- Rename build args: BUILD_VERSION → BUILD_GIT_VERSION, BUILD_COMMIT → BUILD_GIT_COMMIT
+- Add comprehensive OCI labels to Dockerfile
+- Add DOCKER_REGISTRY and BRANCH build args
+
 ## v0.3.0
 
 - Upgrade Python from 3.12 to 3.14

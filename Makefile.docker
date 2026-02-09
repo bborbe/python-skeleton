@@ -4,11 +4,12 @@ DIRS += $(shell find */* -maxdepth 0 -name Makefile -exec dirname "{}" \;)
 build:
 	DOCKER_BUILDKIT=1 \
 	docker build \
-	--no-cache \
 	--rm=true \
 	--platform=linux/amd64 \
-	--build-arg BUILD_VERSION=$$(git describe --tags --always --dirty) \
-	--build-arg BUILD_COMMIT=$$(git rev-parse --short HEAD) \
+	--build-arg DOCKER_REGISTRY=$(DOCKER_REGISTRY) \
+	--build-arg BRANCH=$(BRANCH) \
+	--build-arg BUILD_GIT_VERSION=$$(git describe --tags --always --dirty) \
+	--build-arg BUILD_GIT_COMMIT=$$(git rev-parse --short HEAD) \
 	--build-arg BUILD_DATE=$$(date -u +%Y-%m-%dT%H:%M:%SZ) \
 	-t $(DOCKER_REGISTRY)/$(SERVICE):$(BRANCH) \
 	-f Dockerfile .
