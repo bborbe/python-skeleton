@@ -20,6 +20,19 @@ RUN uv pip install --no-deps -e .
 
 # Runtime stage
 FROM python:3.14-slim
+ARG BUILD_GIT_VERSION=dev
+ARG BUILD_GIT_COMMIT=none
+ARG BUILD_DATE=unknown
+
+LABEL org.opencontainers.image.title="Python Skeleton"
+LABEL org.opencontainers.image.description="Python microservice skeleton/demonstration project"
+LABEL org.opencontainers.image.vendor="Benjamin Borbe"
+LABEL org.opencontainers.image.licenses="BSD-2-Clause"
+LABEL org.opencontainers.image.source="https://github.com/bborbe/python-skeleton"
+LABEL org.opencontainers.image.documentation="https://github.com/bborbe/python-skeleton"
+LABEL org.opencontainers.image.version="${BUILD_GIT_VERSION}"
+LABEL org.opencontainers.image.created="${BUILD_DATE}"
+LABEL org.opencontainers.image.revision="${BUILD_GIT_COMMIT}"
 
 # Create non-root user
 RUN useradd --create-home --shell /bin/bash app
@@ -33,13 +46,8 @@ COPY --from=builder /app/src /app/src
 # Set environment variables
 ENV PATH="/app/.venv/bin:$PATH"
 ENV PYTHONUNBUFFERED=1
-
-# Build metadata (set at build time)
-ARG BUILD_VERSION=dev
-ARG BUILD_COMMIT=none
-ARG BUILD_DATE=unknown
-ENV BUILD_VERSION=${BUILD_VERSION}
-ENV BUILD_COMMIT=${BUILD_COMMIT}
+ENV BUILD_GIT_VERSION=${BUILD_GIT_VERSION}
+ENV BUILD_GIT_COMMIT=${BUILD_GIT_COMMIT}
 ENV BUILD_DATE=${BUILD_DATE}
 
 # Switch to non-root user
