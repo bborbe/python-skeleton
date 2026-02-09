@@ -8,6 +8,11 @@ Please choose versions by [Semantic Versioning](http://semver.org/).
 * MINOR version when you add functionality in a backwards-compatible manner, and
 * PATCH version when you make backwards-compatible bug fixes.
 
+## v0.5.0
+- Add entrypoint script to display build metadata at container startup
+- Fix Dockerfile build by moving src/ copy before uv sync
+- Simplify build stage by removing redundant uv pip install step
+
 ## v0.4.0
 
 - Harmonize build system with go-skeleton
