@@ -8,5 +8,7 @@
 #
 # prReviewer.autoApprove true: verdict "approve" posts as APPROVE
 # (counts toward branch-protection); false/absent demotes approve to COMMENT.
+release:
+  autoRelease: true
 prReviewer:
   autoApprove: true
