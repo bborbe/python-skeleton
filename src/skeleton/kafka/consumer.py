@@ -94,7 +94,7 @@ class KafkaMessageConsumer:
         error = msg.error()
         if error is None:
             return
-        if error.code() == KafkaError._PARTITION_EOF:  # type: ignore[attr-defined]
+        if error.code() == KafkaError._PARTITION_EOF:
             logger.debug(f"Reached end of partition: {msg.topic()}[{msg.partition()}]")
         else:
             raise KafkaException(error)
