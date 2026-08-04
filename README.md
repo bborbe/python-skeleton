@@ -65,7 +65,33 @@ make typecheck
 
 # Run tests
 make test
+
+# Dependency vulnerabilities
+make audit
+
+# Vulnerability + secret scan
+make trivy
 ```
+
+## Security gates
+
+`make check` runs `audit` (pip-audit) and `trivy fs` (vulnerabilities **and** secrets) alongside `lint` and `typecheck`, mirroring go-skeleton and node-skeleton.
+
+`pip-audit` scans the fully-resolved, hashed dependency set exported from `uv.lock`, so it covers the exact transitive tree that gets installed. Unlike node-skeleton's `npm audit --audit-level=high`, there is **no severity threshold**: PyPI advisories carry no reliable severity field, so there is nothing to threshold on. The gate fails on any known vulnerability — stricter than the Node gate, not weaker.
+
+`audit` and `trivy` both depend on `sync` because `uv.lock` is gitignored. Without that dependency a fresh clone would scan no Python manifest at all and report zero vulnerabilities — a silent pass, which is worse than no gate.
+
+Static security analysis (the `gosec` analogue) is ruff's `S` ruleset — flake8-bandit, which is a port of bandit — rather than a separate `bandit` tool. Same rules, no second tool or config, and it runs in the existing `lint` pass. Two rules are suppressed with reasons in `pyproject.toml`: `S104` globally (binding `0.0.0.0` is correct for a containerised service) and `S101` for `tests/**` (`assert` is pytest's assertion mechanism).
+
+`osv-scanner` is **not** included, unlike go-skeleton — it would pull a Go toolchain into a Python repo to add a third advisory database over ground pip-audit and trivy already cover.
+
+Ignores live in `.trivyignore`, one ID per line with a reason. An entry without a reason is a silent risk.
+
+| Skeleton | Security gates in `make check` |
+|---|---|
+| go-skeleton | `vulncheck`, `osv-scanner`, `gosec`, `trivy` (vuln + secret) |
+| node-skeleton | `npm audit` (high/critical), `trivy` (vuln + secret) |
+| python-skeleton | `pip-audit` (any severity), ruff `S`, `trivy` (vuln + secret) |
 
 ## Docker
 

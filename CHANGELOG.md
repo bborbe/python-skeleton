@@ -8,6 +8,17 @@ Please choose versions by [Semantic Versioning](http://semver.org/).
 * MINOR version when you add functionality in a backwards-compatible manner, and
 * PATCH version when you make backwards-compatible bug fixes.
 
+## Unreleased
+
+- Add `audit` target (pip-audit over the hashed dependency set exported from uv.lock)
+- Add `trivy` target (vulnerability + secret scanning), matching go-skeleton and node-skeleton
+- Wire `audit` and `trivy` into `make check`; both depend on `sync` so a missing uv.lock cannot cause a silent pass
+- Enable ruff's `S` (flake8-bandit) ruleset as the gosec analogue, with reasoned suppressions for S104 and tests-only S101
+- Add `.trivyignore` with the reason-required header
+- Install trivy in CI
+- Document the security posture of all three skeletons in README
+- Fix `test_create_app_includes_routers` to assert via TestClient; FastAPI >=0.141 no longer exposes included routes as `.path` on `app.routes`
+
 ## v0.5.0
 - Add entrypoint script to display build metadata at container startup
 - Fix Dockerfile build by moving src/ copy before uv sync

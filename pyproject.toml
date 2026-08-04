@@ -57,7 +57,19 @@ select = [
     "UP",     # pyupgrade
     "SIM",    # flake8-simplify
     "RUF",    # ruff-specific rules
+    "S",      # flake8-bandit -- static security analysis (gosec analogue)
 ]
+
+# Every entry needs a reason, same rule as .trivyignore.
+ignore = [
+    "S104",   # hardcoded-bind-all-interfaces: binding 0.0.0.0 is correct for a
+              # containerised service; the container network namespace, not the
+              # process, is the boundary. Overridable via the HOST env var.
+]
+
+[tool.ruff.lint.per-file-ignores]
+# assert is pytest's assertion mechanism; S101 only makes sense for src/.
+"tests/**" = ["S101"]
 
 [tool.mypy]
 python_version = "3.14"
