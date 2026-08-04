@@ -20,10 +20,48 @@ typecheck:
 	uv run mypy src
 
 .PHONY: check
-# Run lint and typecheck
-check: lint typecheck
+# Lint, typecheck and security gates
+check: lint typecheck audit trivy
 
 .PHONY: test
 # Run tests with pytest
 test: sync
 	uv run pytest
+
+PIP_AUDIT_VERSION ?= 2.9.0
+
+.PHONY: audit
+# Dependency vulnerabilities from the PyPI advisory database (OSV-backed).
+# Exports the fully-resolved, hashed dependency set from uv.lock and audits it,
+# so the audit covers the exact transitive tree that gets installed.
+#
+# Unlike node-skeleton's `npm audit --audit-level=high`, pip-audit has no
+# severity threshold: PyPI advisories do not carry a reliable severity field,
+# so there is nothing to threshold on. This gate therefore fails on ANY known
+# vulnerability -- stricter than the Node gate, not weaker. Findings that are
+# genuinely unreachable get an explicit `--ignore-vuln` entry with a reason.
+audit: sync
+	@set -e; \
+	REQ=$$(mktemp); \
+	trap 'rm -f "$$REQ"' EXIT INT TERM; \
+	uv export --all-extras --no-emit-project --format requirements-txt --quiet -o "$$REQ"; \
+	uvx pip-audit@$(PIP_AUDIT_VERSION) --disable-pip --requirement "$$REQ"
+
+.PHONY: trivy
+# Filesystem scan: dependency vulns (reads uv.lock) + secret detection.
+# Same invocation as go-skeleton and node-skeleton, so behaviour is consistent
+# across languages -- only --skip-dirs differs.
+#
+# Depends on sync because uv.lock is gitignored: without it trivy finds no
+# Python manifest and silently reports zero dependency vulnerabilities.
+trivy: sync
+	trivy fs \
+	--db-repository ghcr.io/aquasecurity/trivy-db \
+	$(if $(wildcard .trivyignore),--ignorefile .trivyignore,$(if $(wildcard $(ROOTDIR)/.trivyignore),--ignorefile $(ROOTDIR)/.trivyignore,)) \
+	$(if $(wildcard .trivy-secret.yaml),--secret-config .trivy-secret.yaml,$(if $(wildcard $(ROOTDIR)/.trivy-secret.yaml),--secret-config $(ROOTDIR)/.trivy-secret.yaml,)) \
+	--scanners vuln,secret \
+	--skip-dirs .venv \
+	--quiet \
+	--no-progress \
+	--disable-telemetry \
+	--exit-code 1 .
