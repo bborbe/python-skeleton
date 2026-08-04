@@ -8,7 +8,7 @@ Please choose versions by [Semantic Versioning](http://semver.org/).
 * MINOR version when you add functionality in a backwards-compatible manner, and
 * PATCH version when you make backwards-compatible bug fixes.
 
-## Unreleased
+## v0.6.0
 
 - feat: add `audit` target (pip-audit over the hashed dependency set exported from uv.lock)
 - feat: add `trivy` target (vulnerability + secret scanning), matching go-skeleton and node-skeleton
