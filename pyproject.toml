@@ -35,11 +35,11 @@ dev = [
 skeleton = "skeleton.__main__:main"
 
 [build-system]
-requires = ["setuptools>=75.0.0"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
-[tool.setuptools.packages.find]
-where = ["src"]
+[tool.hatch.build.targets.wheel]
+packages = ["src/skeleton"]
 
 [tool.ruff]
 line-length = 100

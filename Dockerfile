@@ -6,8 +6,10 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 
 WORKDIR /app
 
-# Copy dependency files and source (needed for package build)
-COPY pyproject.toml uv.lock ./
+# Copy dependency files and source (needed for package build).
+# README.md is required: pyproject.toml declares `readme = "README.md"` and the
+# hatchling backend errors out if the file is missing from the build context.
+COPY pyproject.toml uv.lock README.md ./
 COPY src/ ./src/
 
 # Install production dependencies and package
