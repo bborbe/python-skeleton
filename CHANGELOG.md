@@ -8,6 +8,10 @@ Please choose versions by [Semantic Versioning](http://semver.org/).
 * MINOR version when you add functionality in a backwards-compatible manner, and
 * PATCH version when you make backwards-compatible bug fixes.
 
+## Unreleased
+
+- fix(ci): install Trivy from a `signed-by` keyring instead of the removed `apt-key`. The `Install Trivy` step died with `sudo: 'apt-key': command not found` on the current Ubuntu runner image, failing every PR's required `test` check before any code compiled.
+
 ## v0.6.0
 
 - feat: add `audit` target (pip-audit over the hashed dependency set exported from uv.lock)
